@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() { 
-	int n=1.0e7;  // n number of points in the grid, excluding the boundary points (0,1)
+	int n=1000;  // n number of points in the grid, excluding the boundary points (0,1)
 	arma::vec a = arma::vec(n-1).fill(-1.);
 	arma::vec c = arma::vec(n-1).fill(-1.);
 	arma::vec b = arma::vec(n).fill(2.);
@@ -32,25 +32,25 @@ int main() {
    }
    
    //forward substitution 
-   b_tilde(0)=b(0);
+  // b_tilde(0)=2;
    g_tilde(0)=g(0);
    
 	for ( int i = 1; i<n ; i++) {
-   		b_tilde(i)= b(i) - a(i-1)*c(i-1)/b_tilde(i-1) ;					// a(i-1) and not a(i) as we wrote in class! Because in class the first 'a' was
-   		g_tilde(i)= g(i) - a(i-1)*g_tilde(i-1)/b_tilde(i-1) ;			//denoted as a2
+   		//b_tilde(i)=  (i+2)./(i+1);					
+   		g_tilde(i)= g(i) + 1.*i/(i+1)*g_tilde(i-1) ;			// a(i-1) and not a(i) as we wrote in class! Because in class the first 'a' was denoted as a2
    }
    
 //    //backward substitution
-   v(n-1)=g_tilde(n-1)/b_tilde(n-1);
+   v(n-1)=g_tilde(n-1)*1.*n/(n+1.);
   
    for ( int i = n-2; i>=0 ; --i) {
-   		v(i)= (g_tilde(i) - c(i)*v(i+1))/b_tilde(i);
+   		v(i)= (g_tilde(i) + v(i+1)) *1.*(i+1)/(i+2);
     }
 
 //////////////////writing the solution to a file 
 
 	ofstream myfile;
-	myfile.open ("solutions_7_10^7.txt");
+	myfile.open ("solutions_9c_10.txt");
 	
    if (!myfile ) { // file couldn't be opened
       cerr << "Error: file could not be opened" << endl;
