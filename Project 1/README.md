@@ -1,9 +1,9 @@
-# Problem 1
+# Project 1
 
 Codes for problem 2, 7, 8, 9, 10. 
 
-Codes for plotting in problem 2 and 8 are written in MATLAB. 
-Codes for plotting in problem 7 and 10 are written in Phython, on Jupyter Notebook. 
+Codes for plotting in problem 2 and 8 are written in MATLAB ("problem_2_plot.m","problem_8_plot.m"). 
+Codes for plotting in problem 7 and 10 are written in Phython, on Jupyter Notebook ("problem_7_plot.ipynb" , "problem_10_plot.ipynb"). 
 
 Compiling and linking:
 
