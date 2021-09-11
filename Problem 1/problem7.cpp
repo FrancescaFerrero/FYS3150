@@ -9,7 +9,7 @@
 using namespace std;
 
 int main() { 
-	int n=1.0e7;  // n number of points in the grid, excluding the boundary points (0,1)
+	int n=1.0e3;  // n number of points in the grid, excluding the boundary points (0,1)
 	arma::vec a = arma::vec(n-1).fill(-1.);
 	arma::vec c = arma::vec(n-1).fill(-1.);
 	arma::vec b = arma::vec(n).fill(2.);
@@ -50,7 +50,7 @@ int main() {
 //////////////////writing the solution to a file 
 
 	ofstream myfile;
-	myfile.open ("solutions_7_10^7.txt");
+	myfile.open ("solutions_7_1000.txt");
 	
    if (!myfile ) { // file couldn't be opened
       cerr << "Error: file could not be opened" << endl;
