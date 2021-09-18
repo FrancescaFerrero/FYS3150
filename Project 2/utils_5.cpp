@@ -5,9 +5,9 @@ using namespace arma;
 
 
 // Define a function to create a tridiagonal matrix
-arma::mat create_tridiagonal(int N, double a, double d) {
+  arma::mat create_tridiagonal(int N, double a, double d) {
   // Start from identity matrix
-  arma::mat A = arma::mat(N, N, arma::fill::eye);
+  mat A = arma::mat(N, N, arma::fill::eye);
 
   // Fill the first row
   A(0,0) = d;
@@ -83,15 +83,13 @@ double max_offdiag_symmetric(const arma::mat& A, int& k, int& l)
 // - Modifies the input matrices A and R
 
 void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l) {
-	double epsilon= 1.0e-8;
 	double tau;
 	double t,c,s;
 	double A_m;
 	double R_m;
 	double maxvalue;
 	
-	while (abs(A(k,l))> epsilon) {
-		if (A(k,l))==0) {
+		if (A(k,l)==0) {
 			t=0;
 			s=0;
 			c=1;
@@ -106,7 +104,7 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l) {
 			}
 			c=1/sqrt(1+pow(t,2));
 			s=c*t;
-			}
+		}
 		
 		A_m=A(k,k);	
 		A(k,k)= A_m*pow(c,2) -2*A(k,l)*c*s +A(l,l)*pow(s,2);
@@ -114,7 +112,7 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l) {
 		A(k,l)=A(l,k)=0;
 		
 		
-		for (i=0; i<N; i++) {
+		for (int i=0; i<A.n_rows; i++) {
 			if (i != k && i != l) {
 				A_m=A(i,k); 
 				A(i,k) = A_m*c - A(i,l)*s;
@@ -128,9 +126,7 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l) {
 			R(i,l)=R(i,l)*c + R_m*s;
 		}
 		
-		maxvalue = max_offdiag_symmetric(A, k, l);
-		
-	}
+}
 		
 				
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +140,30 @@ void jacobi_rotate(arma::mat& A, arma::mat& R, int k, int l) {
 // - Writes the number of iterations to the integer "iterations"
 // - Sets the bool reference "converged" to true if convergence was reached before hitting maxiter
 
-void jacobi_eigensolver (const arma::mat& A, double eps, arma::vec& eigenvalues, arma::mat& eigenvectors, const int maxiter, int& iterations, bool& converged);		
+void jacobi_eigensolver (arma::mat& A, double eps, arma::vec& eigenvalues, arma::mat& eigenvectors, const int maxiter, int& iterations, bool& converged) {
+    int k;
+	int l;
+    mat R = mat(A.n_rows, A.n_rows, fill::eye);
+    double maxvalue = max_offdiag_symmetric(A, k, l);
+    
+    while (abs(A(k,l))> eps) {
+        jacobi_rotate(A, R, k, l) ;
+        maxvalue = max_offdiag_symmetric(A, k, l);	
+        iterations = iterations +1;
+        assert (iterations<maxiter);
+	  }
+    converged= true;
+	        
+    for (int i=0;i<A.n_rows; i++) {
+        eigenvalues(i)= A(i,i);
+    }
+    
+    eigenvectors = R;    //each row of R is an eigenvector
+    
+    eigenvalues=sort(eigenvalues);
+    eigenvectors=sort(eigenvectors);
+
+}		
 	
 	
 	

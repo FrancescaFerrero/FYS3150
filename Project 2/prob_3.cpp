@@ -27,7 +27,7 @@ mat eigvecs_analytic(N,N);
 
 for(int i=1; i<=N; i++){
  for(int j=1; j<=N; j++){
-	eigvecs_analytic(j-1,i-1) = sin((M_PI*i*j)/(N+1));
+	eigvecs_analytic(i-1,j-1) = sin((M_PI*i*j)/(N+1));
  }
 	eigvals_analytic(i-1) = d + 2*a*cos((M_PI*i)/(N+1));
 }
@@ -54,8 +54,11 @@ eig_sym(eigvals_arma, eigvecs_arma, A);
 eigvals_arma = normalise(eigvals_arma);
 eigvecs_arma = normalise(eigvecs_arma);
 
-eigvecs_arma.print("eigvecs = ");
-eigvals_arma.t().print("eigvals = ");
+//eigvecs_arma.print("eigvecs = ");
+//eigvals_arma.t().print("eigvals = ");
+
+cout<< "eigenvalues_armadillo - eigenvalues_analytic = " << endl << eigvals_arma.t() - eigvals_analytic.t()<<endl;
+cout<< "eigenvectors_armadillo - eigenvectors_analytic = " << endl << eigvecs_arma - eigvecs_analytic<<endl;
 
 
   return 0;
