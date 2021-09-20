@@ -4,44 +4,15 @@ using namespace std;
 using namespace arma;
 
 
-// Define a function to create a tridiagonal matrix
-  arma::mat create_tridiagonal(int N, double a, double d) {
-  // Start from identity matrix
-  mat A = arma::mat(N, N, arma::fill::eye);
-
-  // Fill the first row
-  A(0,0) = d;
-  A(0,1) = a;
-
-  // Loop that fills rows 2 to n-1 
-  for (int i=1; i<N-1; i++){
-    for (int j=0; j<=N-1; j++){ 
-
-      if(i==j){
-         A(i, j) = d;
-      }
-      if(j == i+1){
-         A(i, j) = a;
-      }
-      if(j == i-1){
-         A(i, j)= a;
-
-      }
-    } 
-  }
-
-  // Fill last row 
-  A(N-1, N-2) = a;
-  A(N-1, N-1) = d;
-
-  return A;
-}
+  int N;
+  arma::mat A = arma::mat(N, N, arma::fill::randu);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // A function that finds the max off-diag element of a symmetric matrix A
 
 double max_offdiag_symmetric(const arma::mat& A, int& k, int& l)
 {
+
   // Get size of the matrix A. 
   int size_A =  A.n_rows;
   
@@ -143,20 +114,17 @@ void jacobi_eigensolver (arma::mat& A, double eps, arma::vec& eigenvalues, arma:
         iterations = iterations + 1;   // Writes the number of iterations to the integer "iterations"
         assert (iterations<maxiter);   // Stops if the number of iterations reaches "maxiter"
     }
-    converged = true; // - Sets the bool reference "converged" to true if convergence was reached before hitting maxiter
+    converged = true;
         
     for (int i=0;i<A.n_rows; i++) {
         eigenvalues(i) = A(i,i);
     }
     
-   // Each row of R is an eigenvector
-  
-    uvec indeces = sort_index(eigenvalues);
+    eigenvectors = R;    // Each row of R is an eigenvector
+    
+    // Writes the eigenvalues as entries in the vector "eigenvalues"
+    // Writes the eigenvectors as columns in the matrix "eigenvectors"
     eigenvalues=sort(eigenvalues);
-    for (int i=0;i<A.n_rows; i++){
-    eigenvectors.row(i)=R.row(indeces(i));     // reordering of rows of the matrix eigenvectors: in this way the first row contains the eigenvector 
-     }                                                                           //corresponding to the lowest eigenvalue, and so on, in ascending order 
-                                                                            
-                                                                            
-}
+    eigenvectors=sort(eigenvectors);
 
+}

@@ -1,5 +1,5 @@
-#ifndef __utils_4_hpp__  
-#define __utils_4_hpp__
+#ifndef __utils_3_hpp__  
+#define __utils_3_hpp__
  
 #include <armadillo>
 #include <sstream>
@@ -13,8 +13,7 @@
 #include <iomanip>
 
 
-double max_offdiag_symmetric(const arma::mat& A, int& k, int& l);
-
+arma::mat create_tridiagonal(int N, double a, double d);
 
 
 #endif  // end of include guard 
