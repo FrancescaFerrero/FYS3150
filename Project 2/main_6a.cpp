@@ -1,4 +1,4 @@
-#include "utils_5.hpp"
+#include "utils.hpp"
 
 using namespace std;
 using namespace arma;
@@ -8,7 +8,7 @@ int main (){
 	int N;
 
 	ofstream myfile;
-	myfile.open ("iterations.txt");
+	myfile.open ("iterations_6a.txt");
 
    if (!myfile ) { // file couldn't be opened
       cerr << "Error: file could not be opened" << endl;

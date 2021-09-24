@@ -1,5 +1,5 @@
-#ifndef __utils_5_hpp__  
-#define __utils_5_hpp__
+#ifndef __utils_hpp__
+#define __utils_hpp__
  
 #include <armadillo>
 #include <sstream>

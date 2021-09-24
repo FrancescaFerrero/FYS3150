@@ -1,4 +1,4 @@
-#include "utils_5.hpp"
+#include "utils.hpp"
 
 using namespace std;
 using namespace arma;
@@ -149,12 +149,12 @@ void jacobi_eigensolver (arma::mat& A, double eps, arma::vec& eigenvalues, arma:
         eigenvalues(i) = A(i,i);
     }
     
-   // Each row of R is an eigenvector
+   // Each column of R is an eigenvector
   
     uvec indeces = sort_index(eigenvalues);
     eigenvalues=sort(eigenvalues);
     for (int i=0;i<A.n_rows; i++){
-    eigenvectors.row(i)=R.row(indeces(i));     // reordering of rows of the matrix eigenvectors: in this way the first row contains the eigenvector 
+    eigenvectors.col(i)=R.col(indeces(i));     // reordering of columns of the matrix eigenvectors: in this way the first column contains the eigenvector 
      }                                                                           //corresponding to the lowest eigenvalue, and so on, in ascending order 
                                                                             
                                                                             

@@ -1,4 +1,4 @@
-#include "utils_5.hpp"
+#include "utils.hpp"
 
 using namespace std;
 using namespace arma;
@@ -8,7 +8,7 @@ int main (){
 	int N;
 
 	ofstream myfile;
-	myfile.open ("iterations_dense.txt");
+	myfile.open ("iterations_6b.txt");
 
    if (!myfile ) { // file couldn't be opened
       cerr << "Error: file could not be opened" << endl;
@@ -31,6 +31,7 @@ for(N=10; N<=200; N+=10){
 	mat eigenvectors(N,N);
 
 	mat A = arma::mat(N, N, arma::fill::randu); // Random matrix
+	A=arma::symmatu(A); //symmetrize random matrix
 
 	jacobi_eigensolver (A, eps, eigenvalues, eigenvectors, maxiter, iterations, converged);
 

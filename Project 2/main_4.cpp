@@ -1,4 +1,4 @@
-#include "utils_4.hpp"
+#include "utils.hpp"
 
 using namespace std;
 using namespace arma;
