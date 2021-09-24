@@ -61,6 +61,8 @@ g++ main_6b.cpp utils.cpp -o main.exe -larmadillo
 
 Run: ./main.exe
 
+-----------------------------------------
+
 __Problem 7__
 
 Saves in textfiles the x values and the three eigenvectors that correspond to the first three eigenvalues for n=10 and n=100 steps. 
@@ -73,6 +75,8 @@ For Linux users:
 g++ main_7.cpp utils.cpp -o main.exe -larmadillo
 
 Run: ./main.exe n
+
+
 where n is desired number of steps, in our case 10 or 100.
 
 
