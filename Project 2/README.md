@@ -4,6 +4,10 @@ Codes for problem 3, 4, 5, 6, 7.
 
 Codes for plotting in problem 6 and 7 are written in Phython, on Jupyter Notebook ("prob_6_plot.ipynb" , "prob_7_plot.ipynb"). 
 
+Plots folder contains plots from problem 6 and 7.
+
+----------------------------------------
+
 __Problem 3__
 
 Sets up a tridiagonal matrix (a,d,a) 6x6, solves linear algebra eigenvalue problem with both Armadillo function and analythical equations. Compare the results with those two methods. 
