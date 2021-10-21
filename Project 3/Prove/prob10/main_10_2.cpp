@@ -16,7 +16,7 @@ int main (){
 	
 //arma_rng::set_seed_random();
 
-double n_step = 1.0e4;
+double n_step = 1.0e3;
 double t_tot = 500.;
 double dt = t_tot/n_step;
 double n_particles=100.;
@@ -55,9 +55,9 @@ for (int k=0; k<n_particles;k++) {
 
 
 // no interactions
-
-for (double om =0.2; om<=0.8; om += 0.01){				//loop over omega_v
+for (double om =0.3; om<=0.7; om += 0.02){				//loop over omega_v
 	my_trap_nointer.omega_v_= om;
+	//#pragma omp parallel for
 	for (int i=0; i<n_step; i++) {
 		for (int j=0; j<my_trap_nointer.particle_collection.size(); j++){									//loop over particles
 			if (i==0){
@@ -77,19 +77,21 @@ for (double om =0.2; om<=0.8; om += 0.01){				//loop over omega_v
 
 	myfile_omega.close();
 
-	
 	ofstream myfile1;
-	myfile1.open ("p_inside_nointer_0.7.txt");
+	myfile1.open ("p_inside_nointer_0.1.txt");
 	for (int i = 0; i < p_inside_nointer.size(); i++) {
 	myfile1<<p_inside_nointer.at(i)<<endl;
 	}
 	myfile1.close();
 	
+	
+	
 
 // with interactions 
 
-for (double om =0.2; om<=0.8; om += 0.01){				//loop over omega_v
+for (double om =0.3; om<=0.7; om += 0.02){				//loop over omega_v
 	my_trap_inter.omega_v_= om;
+//	#pragma omp parallel for
 	for (int i=0; i<n_step; i++) {
 		for (int j=0; j<my_trap_inter.particle_collection.size(); j++){									//loop over particles
 			if (i==0){
@@ -102,11 +104,12 @@ for (double om =0.2; om<=0.8; om += 0.01){				//loop over omega_v
 			}
 		}
 	}
+	cout<<"siamo a omega: "<<om<<endl;
 	p_inside_inter.push_back(my_trap_inter.count_particles(r_step)/n_particles);
 }
 	
 	ofstream myfile2;
-	myfile2.open ("p_inside_inter_0.7.txt");
+	myfile2.open ("p_inside_inter_0.1.txt");
 	for (int i = 0; i < p_inside_inter.size(); i++) {
 	myfile2<<p_inside_inter.at(i)<<endl;
 	}
