@@ -46,7 +46,7 @@ arma::vec PenningTrap::external_E_field(arma::vec r, double t){
 
 double V_d = V0_/pow(d_,2);
 vec E_field (3);
-double f = 0.1;   //amplitude
+double f = 0.1;   //amplitude of the time-dependent applied potential
 
 if (sqrt(pow(r(0),2)+pow(r(1),2)+pow(r(2),2))> d_){
     E_field.zeros();
@@ -93,7 +93,6 @@ F_particle(n) = particle_collection[j].charge()*(dr(n)/dr_abs);
 
 }
 
-
 return F_particle*c;  
 }
 
@@ -115,8 +114,6 @@ return F_ext;
 
 // The total force on particle_i from the other particles
 arma::vec PenningTrap::total_force_particles(int i){
-
-
 vec F_particles (3);
 
 for(int n=0; n<=2; n++){
@@ -139,7 +136,7 @@ vec F_tot (3);
 
 for(int n=0; n<=2; n++){
     F_tot(n) = total_force_external(i,t)(n);
-    if (interaction_ == 1){
+    if (interaction_ == 1){                                             //to switch interactions on and off
         F_tot(n) += total_force_particles(i)(n);
     }
  
@@ -182,11 +179,11 @@ void PenningTrap::evolve_RK4(double dt, int i , mat& r_step, mat& v_step, double
     k4_r = dt*particle_collection[i].velocity();
     k4_v = dt*total_force(i,t + dt)/m;
     
-    r_step.col(i)= r_old + (1./6)*(k1_r + 2*k2_r + 2*k3_r + k4_r);
+    r_step.col(i)= r_old + (1./6)*(k1_r + 2*k2_r + 2*k3_r + k4_r);                          // r_step and v_step keep track of the new position and the velocity at each step
     v_step.col(i)= v_old + (1./6)*(k1_v + 2*k2_v + 2*k3_v + k4_v);
     
-    particle_collection[i].position_= r_old;
-    particle_collection[i].velocity_ = v_old;  
+    particle_collection[i].position_= r_old;                                    // we want the particle's class position and velocity member to don't be updated until  
+    particle_collection[i].velocity_ = v_old;                           //we have looped over all particles 
     
     
 
@@ -202,7 +199,7 @@ vec v_old (3);
 r_old = r_step.col(i);
 v_old = v_step.col(i);
 
-r_step.col(i) = r_old + dt*v_old;
+r_step.col(i) = r_old + dt*v_old;                               // r_step and v_step keep track of the new position and the velocity at each step
 v_step.col(i) = v_old + dt*total_force(i,0)/40.08;
 particle_collection[i].position_ = r_old;
 particle_collection[i].velocity_ = v_old;

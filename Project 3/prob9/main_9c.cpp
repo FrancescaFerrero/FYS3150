@@ -17,7 +17,7 @@ vec velocity_0 (3);
 
 int n_particles = 1;  // number of particles
 
-int j = 0;
+int j = 0; // we have only one particle
 
 mat r_step (3, n_particles);
 mat v_step (3, n_particles);
@@ -54,7 +54,7 @@ double A_m = -(velocity_0(1)+omega_p*position_0(0))/(omega_m-omega_p);
 	
 
 
- for(int p=2; p<7; p++){
+ for(int p=2; p<7; p++){															//loop to increment the power of n_step
  	for (int n_step=pow(10,p); n_step<pow(10,p+1); n_step*=2){
  		
  // Open file to save time values
@@ -73,8 +73,8 @@ cube V_eu (3, n_step, n_particles, fill::zeros);
 mat R_an (3, n_step);
 
 // no interactions
-	for (int i=0; i<n_step; i++) {
-			if (i==0){
+	for (int i=0; i<n_step; i++) {				// loop to increment time
+			if (i==0){							// initial conditions 
 				// Runge-Kutta
 				R.slice(j).col(i)=my_trap_nointer.particle_collection[j].position();
 				V.slice(j).col(i)=my_trap_nointer.particle_collection[j].velocity();
@@ -89,12 +89,12 @@ mat R_an (3, n_step);
 			}
 			else {
 				// Runge-Kutta
-				my_trap_nointer.evolve_RK4(dt, j, r_step, v_step);
-				R.slice(j).col(i) = r_step.col(j);
+				my_trap_nointer.evolve_RK4(dt, j, r_step, v_step); //do one RK step
+				R.slice(j).col(i) = r_step.col(j);		//to store the updated position of the particles
 				V.slice(j).col(i) = v_step.col(j);
 				
 				// Forward Euler
-				my_trap_nointer.evolve_forward_Euler(dt, j, r_step_eu, v_step_eu);
+				my_trap_nointer.evolve_forward_Euler(dt, j, r_step_eu, v_step_eu); // do one FE step
 				R_eu.slice(j).col(i) = r_step_eu.col(j);
 				V_eu.slice(j).col(i) = v_step_eu.col(j);
 			}

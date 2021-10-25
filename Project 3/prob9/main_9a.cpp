@@ -12,67 +12,63 @@ int main (){
 	ofstream myfile_t;
 	myfile_t.open ("time.txt");
 
-   if (!myfile_t ) { // file couldn't be opened
+	if (!myfile_t ) { // file couldn't be opened
       cerr << "Error: file could not be opened" << endl;
       exit(1);
-   }
+      }
    
-double n_step = 1.0e5;
-double t_tot = 100.;
-double dt = t_tot/n_step;
-int n_particles = 2;
+	double n_step = 1.0e5;	//number of step
+	double t_tot = 100.; // total time
+	double dt = t_tot/n_step; // time step
+	int n_particles = 2; // number of particles
 
-vec position_0 (3);
-vec velocity_0 (3);
-mat  r_step (3, n_particles);
-mat v_step (3, n_particles);
-cube R (3, n_step, n_particles, fill::zeros);
-cube V (3, n_step, n_particles, fill::zeros);
+	vec position_0 (3);
+	vec velocity_0 (3);
+	mat  r_step (3, n_particles);
+	mat v_step (3, n_particles);
+	cube R (3, n_step, n_particles, fill::zeros); //to store vector position of the particles, at every step 
+	cube V (3, n_step, n_particles, fill::zeros);  //to store vector velocity of the particles, at every step 
 
-PenningTrap my_trap_inter = PenningTrap(9.65e1, 9.65e8, 1.0e4, 1);
-PenningTrap my_trap_nointer = PenningTrap(9.65e1, 9.65e8, 1.0e4, 0);
-Particle my_particle = Particle(position_0, velocity_0, 1, 40.08);
+	PenningTrap my_trap_inter = PenningTrap(9.65e1, 9.65e8, 1.0e4, 1); 		//Penning trap with interaction on
+	PenningTrap my_trap_nointer = PenningTrap(9.65e1, 9.65e8, 1.0e4, 0);	//Penning trap with interaction off
+	Particle my_particle = Particle(position_0, velocity_0, 1, 40.08);
 
-for (int k=0; k<n_particles; k++) { 
-	if (k==0){
-		position_0 = {1, 0, 1};
-		velocity_0 = {1, 1, 1};
-	}
-	else {
+	for (int k=0; k<n_particles; k++) { 				// set initial position and velocity
+		if (k==0){
+			position_0 = {1, 0, 1};
+			velocity_0 = {1, 1, 1};
+		}
+		else {
 		position_0 = {-10, 0, 1};
 		velocity_0 = {1, 1, 1};
+		}
+	my_particle.position_ = position_0;
+	my_particle.velocity_ = velocity_0;
+	my_trap_inter.add_particle(my_particle);
+	my_trap_nointer.add_particle(my_particle);
 	}
-	
-	
-
-my_particle.position_ = position_0;
-my_particle.velocity_ = velocity_0;
-my_trap_inter.add_particle(my_particle);
-my_trap_nointer.add_particle(my_particle);
-
-}
 
 
-if (n_particles>1){
+	if (n_particles>1){
 
 // with interactions 
 
-	for (int i=0; i<n_step; i++) {
+	for (int i=0; i<n_step; i++) {															//loop to increment time
 		for (int j=0; j<my_trap_inter.particle_collection.size(); j++){									//loop over particles
-			if (i==0){
+			if (i==0){																										//initial conditions
 				R.slice(j).col(i) = my_trap_inter.particle_collection[j].position();
 				V.slice(j).col(i) = my_trap_inter.particle_collection[j].velocity();
 				r_step.col(j) = my_trap_inter.particle_collection[j].position();
 				v_step.col(j) = my_trap_inter.particle_collection[j].velocity();
 			}
 			else {
-				my_trap_inter.evolve_RK4(dt, j, r_step, v_step);
+				my_trap_inter.evolve_RK4(dt, j, r_step, v_step);							//do one RK step
 				//my_trap_inter.evolve_forward_Euler(dt,j, r_step, v_step);
-				R.slice(j).col(i) = r_step.col(j);
+				R.slice(j).col(i) = r_step.col(j);													//to store the updated position of the particles
 				V.slice(j).col(i) = v_step.col(j);
 			}
 		}
-		}
+	}
 	
 	ofstream myfile1_inter;
 	myfile1_inter.open ("r1_inter.txt");
@@ -113,7 +109,7 @@ if (n_particles>1){
 			}
 		}
 		myfile_t<<i*dt<<endl;
-		}
+	}
 	
 	ofstream myfile1_nointer;
 	myfile1_nointer.open ("r1_nointer.txt");

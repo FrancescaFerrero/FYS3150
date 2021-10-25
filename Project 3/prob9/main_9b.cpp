@@ -10,7 +10,7 @@ using namespace arma;
 
 int main (int argc, char* argv[]){ 
    
-double n_step = atoi(argv[1]); 
+double n_step = atoi(argv[1]); 	//number of step
 double t_tot = 100.;  // total time
 double dt = t_tot/n_step; // time step
 int n_particles = 1;  // number of particles
@@ -25,8 +25,8 @@ cube V (3, n_step, n_particles, fill::zeros);
 
 mat r_step_eu (3, n_particles);
 mat v_step_eu (3, n_particles);
-cube R_eu (3, n_step, n_particles, fill::zeros);
-cube V_eu (3, n_step, n_particles, fill::zeros);
+cube R_eu (3, n_step, n_particles, fill::zeros); //to store vector position of the particles, at every step 
+cube V_eu (3, n_step, n_particles, fill::zeros); //to store vector velocity of the particles, at every step 
 
 mat R_an (3, n_step);
 
@@ -56,8 +56,8 @@ my_trap_nointer.add_particle(my_particle);
 
 
 // no interactions
-	for (int i=0; i<n_step; i++) {
-			if (i==0){
+	for (int i=0; i<n_step; i++) {		//loop to increment time
+			if (i==0){	//initial conditions
 				// Runge-Kutta
 				R.slice(j).col(i) = my_trap_nointer.particle_collection[j].position();
 				V.slice(j).col(i) = my_trap_nointer.particle_collection[j].velocity();
@@ -72,13 +72,13 @@ my_trap_nointer.add_particle(my_particle);
 			}
 			else {
 				// Runge-Kutta
-				my_trap_nointer.evolve_RK4(dt, j, r_step, v_step);
+				my_trap_nointer.evolve_RK4(dt, j, r_step, v_step);	//do one RK step
 				R.slice(j).col(i) = r_step.col(j);
 				V.slice(j).col(i) = v_step.col(j);
 				
 				// Forward Euler
-				my_trap_nointer.evolve_forward_Euler(dt, j, r_step_eu, v_step_eu);
-				R_eu.slice(j).col(i) = r_step_eu.col(j);
+				my_trap_nointer.evolve_forward_Euler(dt, j, r_step_eu, v_step_eu);			//do one FE step
+				R_eu.slice(j).col(i) = r_step_eu.col(j);			//to store the updated position of the particles
 				V_eu.slice(j).col(i) = v_step_eu.col(j);
 			}
 		myfile_t<<i*dt<<endl;
