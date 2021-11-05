@@ -1,22 +1,21 @@
 #ifndef __utils_hpp__
 #define __utils_hpp__
  
-#include<armadillo>
+#include <armadillo>
 #include <ctime>
-#include<cmath>
+#include <cmath>
 #include <iostream>
-#include<cstring>
-#include<fstream>
-#include<iomanip>
+#include <fstream>
+#include <iomanip>
 #include <cstdlib>
+#include <vector>      // For vector
+#include <string>      // For string
 
 
 int idx (int i, int limit, int add);
-double energy_spin (arma::imat spin_matrix);
-double mag_spin (arma::imat spin_matrix);
+double energy (arma::imat spin_matrix);
+double mag (arma::imat spin_matrix);
 void Metropolis(arma::imat& spin_matrix, double& E, double& M, arma::vec Bf);
-
-
 	
 	
 	
