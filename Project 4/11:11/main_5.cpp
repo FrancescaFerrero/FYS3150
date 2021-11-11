@@ -29,7 +29,7 @@ int main (int argc, char* argv[]){
 	// initial energy and magnetization
 	double E = energy(spin_matrix);
 	double M = mag(spin_matrix);
-	double M_in = M;
+	//double M_in = M;
 	
 	double X;	 // susceptibility
 	double Cv; 	 // specific heat capacity 
@@ -41,11 +41,7 @@ int main (int argc, char* argv[]){
 	for( int i = -8; i <= 8; i += 4){ 
 		Bf(i+8) = exp(-1.*i/T);
 	}
-	
 
-	// for (int i = 0; i < burnin.... ){
-	// 	Metropolis(spin_matrix, E, M, Bf);
-	// }
 
 	
 	for (int n_cycles = 1; n_cycles <= max_cycles; n_cycles++){	// loop over the different numbers of cycles
@@ -54,10 +50,14 @@ int main (int argc, char* argv[]){
 			// update averages
 		average(0) += E; 
 		average(1) += E*E; 
-		average(2) += fabs(M); 
+		average(2) += fabs(M);
 		average(3) += M*M;
 
-		myfile<<n_cycles<<" "<<average(0)*(1./(n_cycles*L*L))<<" "<<average(2)*(1./(n_cycles*L*L))<<endl;
+		myfile<<n_cycles<<" "<<setw(15) << setprecision(8) <<average(0)*(1./(n_cycles*L*L))<<" "<<average(2)*(1./(n_cycles*L*L))<<endl;
+
+		if (n_cycles==10000){
+			cout<<"Energy at "<<n_cycles<<": "<< energy(spin_matrix)<<endl;
+		}
 
 	}
 	
@@ -101,7 +101,8 @@ int main (int argc, char* argv[]){
 	cout << "E squared:" << average(1)<< endl;
 	cout << "E squared analytical:" << E2_an << endl;
 
-	cout<<" Initial Magnetization"<< M_in<<endl;
+	cout<<" Final matrix: "<< spin_matrix<<endl;
+	cout<<" Energy: "<< energy(spin_matrix)<<endl;
 
 	
 	return 0;

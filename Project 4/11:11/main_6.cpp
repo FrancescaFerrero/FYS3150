@@ -25,7 +25,7 @@ int main (int argc, char* argv[]){
 	
 	int max_cycles = 100000;		// number of MC cycles
 	vec average (4, fill::zeros); 	// initialize a vector to store averages
-	int burning_time = 200000;	
+	int burnin_time = 250000;	
 	
 	// initial energy and magnetization
 	double E = energy(spin_matrix);
@@ -41,10 +41,11 @@ int main (int argc, char* argv[]){
 	}
 	
 
-	for (int i = 0; i < burning_time; i++){
+	for (int i = 0; i < burnin_time; i++){
 		Metropolis(spin_matrix, E, M, Bf); 
 	}
 
+	cout<<"energy after burn in: "<<energy(spin_matrix)*(1./(L*L))<<endl;
 	for (int n_cycles = 1; n_cycles <= max_cycles; n_cycles++){	// loop over the different numbers of cycles
 		// Monte Carlo 
 		Metropolis(spin_matrix, E, M, Bf);
@@ -54,7 +55,8 @@ int main (int argc, char* argv[]){
 		average(2) += fabs(M); 
 		average(3) += M*M;
 
-		myfile<<average(0)*(1./(n_cycles*L*L))<<endl;
+
+		myfile<<n_cycles<<" "<<setw(15) << setprecision(8) <<average(0)*(1./((n_cycles)*L*L))<<" "<<E*1./(L*L)<<endl;
 
 	}
 	
