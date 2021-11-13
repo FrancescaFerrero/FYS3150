@@ -17,6 +17,4 @@ double energy (arma::imat spin_matrix);
 double mag (arma::imat spin_matrix);
 void Metropolis(arma::imat& spin_matrix, double& E, double& M, arma::vec Bf);
 	
-	
-	
 #endif  // end of include guard 

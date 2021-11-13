@@ -25,9 +25,6 @@ int main (int argc, char* argv[]){
 	ofstream myfile;
 	myfile.open ("7_rand_" + std::to_string(L) + ".txt");
 
-	//n_step = 10;
-
-
 	#pragma omp parallel private(E, M, X, Cv)  // Start parallel region
   	{	
   		const int my_thread = omp_get_thread_num();
@@ -63,12 +60,9 @@ int main (int argc, char* argv[]){
 				average(1) += E*E; 
 				average(2) += fabs(M); 
 				average(3) += M*M;
-
-				//if (n_cycles%10000==0) cout<<n_cycles<<endl;
 			}		
 			
-			if (my_thread == 0) cout << T<<endl;
-
+			if (my_thread == 0) cout << T<<endl;  // to keep track of where we are during execution
 
 			// compute final average and normalize to the number of spins 
 			double avg_e = average(0)/double(L*L);
@@ -79,11 +73,6 @@ int main (int argc, char* argv[]){
 			avg_m = avg_m/(double)(max_cycles);
 			double avg_m2 = average(3)/double(L*L);
 			avg_m2 = avg_m2/(double)(max_cycles);
-			// average(0) = average(0)*(1./(max_cycles*L*L));
-			// average(2) = average(2)*(1./(max_cycles*L*L));
-			// average(1) = average(1)*(1./(max_cycles*L*L));
-			// average(3) = average(3)*(1./(max_cycles*L*L));
-
 
 			// Compute specific heat capacity and susceptibility per spin
 			Cv = (avg_e2 - pow(avg_e,2)*(L*L))/(T*T);
@@ -95,16 +84,15 @@ int main (int argc, char* argv[]){
       		results(int_T,3) = Cv;
       		results(int_T,4) = X;
 
-
 		} // End parallelized loop over T
 		double end = omp_get_wtime();
+		// to know how long it takes __ every thread is doing the same type of operations, so they will basically take the same time.
 		double timeused = end - start;
 		if (my_thread == 0) cout << "timeused = " << timeused << endl;
 	}	// End entire parallel region
-
 
 	myfile << results;
 	myfile.close();
 
 	return 0;
-	}
+}
