@@ -8,9 +8,9 @@ Plots folder contains plots.
 
 ## main_5.cpp
 
-Computes the average energy, average magnetization, specific heat capacity and susceptibility numerically and computes them analytically for a lattice size L=2 and a temperature 1 J/k<sub>b</sub>b. 
+Computes the average energy, average magnetization, specific heat capacity and susceptibility numerically and computes them analytically for a lattice size L=2 and a temperature 1 J/k<sub>b</sub>. 
 Saves in text file the running averages of energy and magnetization. 
-For L=2, T=1 J/k<sub>b</sub>b compares the numerical values with the analytical ones and displays the output to the monitor. 
+For L=2, T=1 J/k<sub>b</sub> compares the numerical values with the analytical ones and displays the output to the monitor. 
 The user needs to give as input the dimension L of the matrix (LxL), the desired temperature T and a keyword that indicates wheter the initial state should be ordered or random.
 
 Compile and linking: g++ main_5.cpp utils.cpp -std=c++11 -o main.exe -larmadillo
@@ -47,8 +47,8 @@ where L is the size of the lattice.
 ## prob_5_plot.ipynb
 
 Takes data from output files of main_5.cpp and main_6.cpp.
-Produces plots for running average of energy and magnetization for L=20 and L=2, T=1 J/k<sub>b</sub>b and T=2.4 J/k<sub>b</sub>b as a function of the number of Monte Carlo cycles, for both random and ordered initial state.
-Furthermore, produces plots of the probability distribution of the energy per spin by creating normalized histograms of generated energy samples, for T=1 J/k<sub>b</sub>b and T=2.4 J/k<sub>b</sub>b. 
+Produces plots for running average of energy and magnetization for L=20 and L=2, T=1 J/k<sub>b</sub> and T=2.4 J/k<sub>b</sub> as a function of the number of Monte Carlo cycles, for both random and ordered initial state.
+Furthermore, produces plots of the probability distribution of the energy per spin by creating normalized histograms of generated energy samples, for T=1 J/k<sub>b</sub> and T=2.4 J/k<sub>b</sub>. 
 
 
 ## prob_7_plot.ipynb
