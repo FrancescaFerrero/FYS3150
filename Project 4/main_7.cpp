@@ -6,87 +6,105 @@ using namespace arma;
 
 int main (int argc, char* argv[]){ 
 	
-	//arma_rng::set_seed_random();
 	int L = atoi(argv[1]);	// set dimension of the LxL matrix
-	int n_cycles = 1000;	//number of MC cycles
-	vec average (4, fill::zeros); 	// initialize a vector to store averages	
-	imat spin_matrix;	// lattice of spins
-	double T;
 	double min_T = 2.1;
 	double max_T = 2.4;
-	double step_size = 0.01;
+	double step_size = 0.003; //(max_T - min_T)/100
+	int burnin_time = 1000;	
+	int max_cycles = 2097152;		// number of MC cycles 2^21
 	int n_step = (max_T - min_T)/step_size + 1;	// n_step points correspond to (n_step - 1) intervals
 
 	// initial energy and magnetization
-	double E = energy(spin_matrix);
-	double M = mag(spin_matrix);	
+	double E;
+	double M;
 	double X;	 // susceptibility
 	double Cv; 	 // specific heat capacity 
 
+	mat results = mat(n_step+1, 5, fill::zeros);
 
-	#pragma omp parallel // Start parallel region
-  	{
-  		// Each thread will get its own output file name
-	    const int my_thread = omp_get_thread_num();
-	    ofstream myfile;
+	ofstream myfile;
+	myfile.open ("7_rand_" + std::to_string(L) + ".txt");
 
-		// set ordered or random initial state
-		string state = argv[2];
-		if (state == "ordered"){
-			spin_matrix = ones<imat>(L,L);
-			myfile.open ("7_ord_"+std::to_string(L)+ ".thread_" + to_string(my_thread) + ".txt", ofstream::trunc); // ofstream::trunc makes sure old content is deleted
-		}
-		else{
-			spin_matrix = randi<imat>(L, L, distr_param(0,1))*2 - 1;
-			myfile.open ("7_rand_" + std::to_string(L) + ".thread_" + to_string(my_thread) + ".txt", ofstream::trunc);
-		}
+	//n_step = 10;
 
-	  
 
-		#pragma omp for // Start parallel region
+	#pragma omp parallel private(E, M, X, Cv)  // Start parallel region
+  	{	
+  		const int my_thread = omp_get_thread_num();
+  		arma_rng::set_seed_random();
+
+  		double start = omp_get_wtime();
+		#pragma omp for // Start parallelize loop
 		for(int int_T = 0; int_T <= n_step; int_T += 1){	// loop over the temperature values	
-			T = (int_T*step_size) + min_T;
+			
+			double T = (int_T*step_size) + min_T;
+
+			vec average (4, fill::zeros);	// initialize a vector to store averages
+			imat spin_matrix = randi<imat>(L, L, distr_param(0,1))*2 - 1;	// set random initial state
+			E = energy(spin_matrix);
+			M = mag(spin_matrix);
+			
 			// set up array for the Boltzmann factor
 			vec Bf (17, fill::zeros);
 			for( int i = -8; i <= 8; i += 4){ 
 				Bf(i+8) = exp(-1.*i/T);
 			}
-			if (state == "ordered"){
-				spin_matrix = ones<imat>(L,L);
-			}
-			else{
-				spin_matrix = randi<imat>(L, L, distr_param(0,1))*2 - 1;
-			}
 
-			average.zeros();
-			E = energy(spin_matrix);
-			M = mag(spin_matrix);
+
+			for (int i = 0; i < burnin_time; i++){
+				Metropolis(spin_matrix, E, M, Bf); 
+			}
 				
 			// Monte Carlo 
-			for (int i = 1; i <= n_cycles; i++){
+			for (int n_cycles = 1; n_cycles <= max_cycles; n_cycles++){
 				Metropolis(spin_matrix, E, M, Bf);
 				// update averages
 				average(0) += E; 
 				average(1) += E*E; 
 				average(2) += fabs(M); 
 				average(3) += M*M;
+
+				//if (n_cycles%10000==0) cout<<n_cycles<<endl;
 			}		
-			// compute final average normalize to the number of spins 
-			average = average*(1./(n_cycles*L*L));
-			average(1) = average(1)/(L*L);
-			average(3) = average(3)/(L*L);		
+			
+			if (my_thread == 0) cout << T<<endl;
 
-			// Compute specific heat capacity and susceptibility
-			Cv = (average(1) - pow(average(0),2))/(T*T);
-			X = (average(3) - pow(average(2),2))/T;
 
-			myfile << T << " " << average(0) << " " << average(2) << " " << Cv << " " << X << endl;
+			// compute final average and normalize to the number of spins 
+			double avg_e = average(0)/double(L*L);
+			avg_e = avg_e/(double)(max_cycles);
+			double avg_e2 = average(1)/double(L*L);
+			avg_e2 = avg_e2/(double)(max_cycles);
+			double avg_m = average(2)/double(L*L);
+			avg_m = avg_m/(double)(max_cycles);
+			double avg_m2 = average(3)/double(L*L);
+			avg_m2 = avg_m2/(double)(max_cycles);
+			// average(0) = average(0)*(1./(max_cycles*L*L));
+			// average(2) = average(2)*(1./(max_cycles*L*L));
+			// average(1) = average(1)*(1./(max_cycles*L*L));
+			// average(3) = average(3)*(1./(max_cycles*L*L));
+
+
+			// Compute specific heat capacity and susceptibility per spin
+			Cv = (avg_e2 - pow(avg_e,2)*(L*L))/(T*T);
+			X = (avg_m2 - pow(avg_m,2)*(L*L))/T;
+
+			results(int_T,0) = T;
+      		results(int_T,1) = avg_e;	//avg energy per spin
+      		results(int_T,2) = avg_m;	//avg magnetization per spin
+      		results(int_T,3) = Cv;
+      		results(int_T,4) = X;
+
 
 		} // End parallelized loop over T
-
-		myfile.close();
-
+		double end = omp_get_wtime();
+		double timeused = end - start;
+		if (my_thread == 0) cout << "timeused = " << timeused << endl;
 	}	// End entire parallel region
-		
+
+
+	myfile << results;
+	myfile.close();
+
 	return 0;
-}
+	}

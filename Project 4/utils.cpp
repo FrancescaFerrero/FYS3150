@@ -54,7 +54,7 @@ double mag (imat spin_matrix) {
       		}
       	}
       	else {
-      		spin_matrix(iy, ix) *= -1; // flip the spins
+      		spin_matrix(iy, ix) *= -1; // flip the spin
       		M += (2*spin_matrix(iy,ix));
       		E += deltaE;      			
       	}
