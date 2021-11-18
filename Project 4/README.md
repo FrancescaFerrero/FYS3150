@@ -55,6 +55,7 @@ Furthermore, produces plots of the probability distribution of the energy per sp
 
 Takes data from output files of main_7.cpp.
 Produces plots of the average enery, average magnetization, specific heat capacity and susceptibility as function of temperature, for different lattice sizes.
-...ex 9 to be continued ...
+Performs linear regression to verify the scaling relation $T_c(L)-T_c(\inf)=aL^{-1}$ where $T_c(L)$ is the critical temperature for a certain lattice size L and $T_c(\inf)$ is then compared to the analytical result found by Lars Onsager.
+
 
 
