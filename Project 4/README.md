@@ -48,9 +48,12 @@ where L is the size of the lattice.
 
 Takes data from output files of main_5.cpp and main_6.cpp.
 Produces plots for running average of energy and magnetization for L=20 and L=2, T=1 J/k<sub>B</sub> and T=2.4 J/k<sub>B</sub> as a function of the number of Monte Carlo cycles, for both random and ordered initial state.
-Furthermore, produces plots of the probability distribution of the energy per spin by creating normalized histograms of generated energy samples, for T=1 J/k<sub>B</sub> and T=2.4 J/k<sub>B</sub>. 
 
+## prob_6_plot.ipynb
 
+Takes data from output files of main_6.cpp.
+Produces plots of the probability distribution of the energy per spin by creating normalized histograms of generated energy samples, for T=1 J/k<sub>B</sub> and T=2.4 J/k<sub>B</sub>. 
+ 
 ## prob_7_plot.ipynb
 
 Takes data from output files of main_7.cpp.
