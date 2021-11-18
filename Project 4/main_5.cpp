@@ -50,7 +50,7 @@ int main (int argc, char* argv[]){
 		average(2) += fabs(M);
 		average(3) += M*M;
 	
-		myfile<<n_cycles<<" "<<setw(15) << setprecision(8) <<average(0)/(double)(n_cycles*L*L)<<" "<<average(2)*(1./(n_cycles*L*L))<<endl;
+		myfile<<n_cycles<<" "<<setw(15) << setprecision(8) <<average(0)/(double)(n_cycles*L*L)<<" "<<average(2)/(double)(n_cycles*L*L)<<endl;
 	}
 	
 	myfile.close();

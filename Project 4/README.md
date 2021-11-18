@@ -8,9 +8,9 @@ Plots folder contains plots.
 
 ## main_5.cpp
 
-Computes the average energy, average magnetization, specific heat capacity and susceptibility numerically and computes them analytically for a lattice size L=2 and a temperature 1 J/k<sub>b</sub>. 
+Computes the average energy, average magnetization, specific heat capacity and susceptibility numerically and computes them analytically for a lattice size L=2 and a temperature 1 J/k<sub>B</sub>. 
 Saves in text file the running averages of energy and magnetization. 
-For L=2, T=1 J/k<sub>b</sub> compares the numerical values with the analytical ones and displays the output to the monitor. 
+For L=2, T=1 J/k<sub>B</sub> compares the numerical values with the analytical ones and displays the output to the monitor. 
 The user needs to give as input the dimension L of the matrix (LxL), the desired temperature T and a keyword that indicates wheter the initial state should be ordered or random.
 
 Compile and linking: g++ main_5.cpp utils.cpp -std=c++11 -o main.exe -larmadillo
@@ -47,15 +47,15 @@ where L is the size of the lattice.
 ## prob_5_plot.ipynb
 
 Takes data from output files of main_5.cpp and main_6.cpp.
-Produces plots for running average of energy and magnetization for L=20 and L=2, T=1 J/k<sub>b</sub> and T=2.4 J/k<sub>b</sub> as a function of the number of Monte Carlo cycles, for both random and ordered initial state.
-Furthermore, produces plots of the probability distribution of the energy per spin by creating normalized histograms of generated energy samples, for T=1 J/k<sub>b</sub> and T=2.4 J/k<sub>b</sub>. 
+Produces plots for running average of energy and magnetization for L=20 and L=2, T=1 J/k<sub>B</sub> and T=2.4 J/k<sub>B</sub> as a function of the number of Monte Carlo cycles, for both random and ordered initial state.
+Furthermore, produces plots of the probability distribution of the energy per spin by creating normalized histograms of generated energy samples, for T=1 J/k<sub>B</sub> and T=2.4 J/k<sub>B</sub>. 
 
 
 ## prob_7_plot.ipynb
 
 Takes data from output files of main_7.cpp.
 Produces plots of the average enery, average magnetization, specific heat capacity and susceptibility as function of temperature, for different lattice sizes.
-Performs linear regression to verify the scaling relation $T_c(L)-T_c(\inf)=aL^{-1}$ where $T_c(L)$ is the critical temperature for a certain lattice size L and $T_c(\inf)$ is then compared to the analytical result found by Lars Onsager.
+Performs linear regression to verify the scaling relation T<sub>c</sub>(L)-T<sub>c</sub>(\infty)=aL^{-1}$ where $T<sub>c</sub>(L)$ is the critical temperature for a certain lattice size L and $T<sub>c</sub>(\infty)$ is then compared to the analytical result found by Lars Onsager.
 
 
 
